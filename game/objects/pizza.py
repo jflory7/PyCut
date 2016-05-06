@@ -123,14 +123,16 @@ class Pizza(Rangable):
             if topping not in self.requirements:
                 notwanted += 1
         if missing > 0:
-            message += ["There is too little toppings on the pizza. :(".format(notwanted)]
+            message += ["There aren't enough toppings on the pizza. :(".format(notwanted)]
         elif missing < 0:
-            message += ["There is too much toppings on the pizza than I wanted. :(".format(notwanted)]
+            message += ["There are more toppings on the pizza than I wanted. :(".format(notwanted)]
         if notwanted > 0:
-            message += ["There is {} topping on the pizza I don't like. :(".format(notwanted)]
+            message += ["There {} {} {} on the pizza I don't like. :(".format(
+                'is' if notwanted == 1 else 'are', notwanted, 'topping' if notwanted == 1 else 'toppings'
+            )]
         if not(notwanted) and missing == 0:
             metRequirement = True
-            message += ["Thank you! That was the perfect Pizza I was looking for :)\n"]
+            message += ["Thank you, that was the perfect pizza I was looking for! :)\n"]
         return (metRequirement, message)
 
     """
