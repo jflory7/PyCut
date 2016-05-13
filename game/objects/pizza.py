@@ -31,7 +31,7 @@ class Pizza(Rangable):
         update the button drawing surface.
     """
     def draw(self):
-        S = 2 #speed towards trash can
+        S = 8 #speed towards trash can
         A = 9.8 #acceleration towards trash can
         if self.trashing:
             if self.touches(self.trash_can):
