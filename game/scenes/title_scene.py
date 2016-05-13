@@ -8,6 +8,7 @@ class TitleScene(SceneBase):
         self.createTitle()
         self.createStartButton()
         self.createHowToButton()
+        self.createScoreText()
 
     def ProcessInput(self, events, pressed_keys):
         for event in events:
@@ -36,6 +37,7 @@ class TitleScene(SceneBase):
         self.title.drawOn(self.screen)
         self.start_button.drawOn(self.screen)
         self.help_button.drawOn(self.screen)
+        self.score_msg.drawOn(self.screen)
         #self.screen.blit(self.start_button.draw(),
         #        ( (self.context.width - self.start_button.width) // 2,
         #         ((self.context.height - self.start_button.height) + self.title.get_height()) // 2))
@@ -43,7 +45,8 @@ class TitleScene(SceneBase):
 
     def createTitle(self):
         self.title = Text(self.context, self.context.title)
-        self.title.setPen(self.context.font_large)
+        self.title.setColor((244, 101, 36))
+        self.title.setPen(self.context.bold_font_large)
         self.title.setLocation( (self.context.width - self.title.width) // 2,
                                 (self.context.height - self.title.height) // 2)
 
@@ -67,6 +70,14 @@ class TitleScene(SceneBase):
         self.help_button.setBackgroundImg(self.context.button_bg_active, STATE.ACTIVE)
         self.help_button.setLocation((self.context.width - self.help_button.width) // 2,
                                       ((self.context.height - self.help_button.height) // 2) + self.title.height + self.start_button.height + 5 )
+
+    def createScoreText(self):
+        self.score_msg = Text(self.context, "Experience: {} Pizzas".format(self.context.total_good_pizza))
+        self.score_msg.setPen(self.context.bold_font)
+        self.score_msg.setColor((244, 101, 36))
+        self.score_msg.setLocation((self.context.width - self.score_msg.width) // 2,
+                                    ((self.context.height - self.score_msg.height) // 2) + self.title.height + self.start_button.height + self.help_button.height + 10)
+
     """
     helper methods below this point
     """

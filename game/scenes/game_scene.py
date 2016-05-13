@@ -76,7 +76,7 @@ class GameScene(SceneBase):
 
     def Render(self):
         # The game scene is just a blank blue screen
-        self.screen.fill((0, 0, 255))
+        self.screen.fill((244, 101, 36))
         self.screen.blit(self.context.shop_background,(0,0))
         self.screen.blit(self.characters[self.level% len(self.characters)],(850,255))
         self.screen.blit(self.context.counter_top,(0,0))
