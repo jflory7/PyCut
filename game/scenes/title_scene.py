@@ -1,5 +1,5 @@
 import pygame
-from . import SceneBase, GameScene
+from . import SceneBase, GameScene, HelpScene
 from game.objects import Text, Button, STATE
 
 class TitleScene(SceneBase):
@@ -7,6 +7,7 @@ class TitleScene(SceneBase):
         SceneBase.__init__(self, context)
         self.createTitle()
         self.createStartButton()
+        self.createHowToButton()
 
     def ProcessInput(self, events, pressed_keys):
         for event in events:
@@ -16,12 +17,15 @@ class TitleScene(SceneBase):
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.start_button.isClicked(event)
+                self.help_button.isClicked(event)
 
             if event.type == pygame.MOUSEBUTTONUP:
                 self.start_button.isClicked(event)
+                self.help_button.isClicked(event)
 
             if event.type == pygame.MOUSEMOTION:
                 self.start_button.isHovered(event)
+                self.help_button.isHovered(event)
 
     def Update(self):
         pass
@@ -31,6 +35,7 @@ class TitleScene(SceneBase):
         self.screen.fill((255, 255, 255))
         self.title.drawOn(self.screen)
         self.start_button.drawOn(self.screen)
+        self.help_button.drawOn(self.screen)
         #self.screen.blit(self.start_button.draw(),
         #        ( (self.context.width - self.start_button.width) // 2,
         #         ((self.context.height - self.start_button.height) + self.title.get_height()) // 2))
@@ -52,6 +57,16 @@ class TitleScene(SceneBase):
         self.start_button.setBackgroundImg(self.context.button_bg_active, STATE.ACTIVE)
         self.start_button.setLocation((self.context.width - self.start_button.width) // 2,
                                       ((self.context.height - self.start_button.height) // 2) + self.title.height )
+
+    def createHowToButton(self):
+        self.help_button = Button(self.context, "How To Play")
+        self.help_button.setPen(self.context.font_small)
+        self.help_button.setPen(self.context.font, STATE.HOVER)
+        self.help_button.setOnLeftClick(self.handleHelpButtonClick)
+        self.help_button.setBackgroundImg(self.context.button_bg, STATE.NORMAL)
+        self.help_button.setBackgroundImg(self.context.button_bg_active, STATE.ACTIVE)
+        self.help_button.setLocation((self.context.width - self.help_button.width) // 2,
+                                      ((self.context.height - self.help_button.height) // 2) + self.title.height + self.start_button.height + 5 )
     """
     helper methods below this point
     """
@@ -60,3 +75,6 @@ class TitleScene(SceneBase):
 
     def handleStartButtonClick(self):
         self.SwitchToScene(GameScene)
+
+    def handleHelpButtonClick(self):
+        self.SwitchToScene(HelpScene)

@@ -22,6 +22,7 @@ class PyCutGame():
         self.bold_font_path  = "game/assets/font/Roboto-Regular.ttf"
         self.shop_background = pygame.image.load("game/assets/img/Background.png")
         self.counter_top = pygame.image.load("game/assets/img/Countertop.png")
+        self.help_img = pygame.image.load("game/assets/img/help.png")
         self.plain_pizza = pygame.image.load("game/assets/img/blank_pizza.png")
         self.button_bg = pygame.image.load("game/assets/img/red_button01.png")
         self.button_bg_active = pygame.image.load("game/assets/img/red_button02.png")
