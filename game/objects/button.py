@@ -1,6 +1,6 @@
 import pygame
 from game.events import Clickable, Hoverable
-from . import STATE, STYLES_NAMES as SM
+from . import STATE, STATES, STYLES_NAMES as SM
 
 class Button(Clickable, Hoverable):
     """docstring for Button"""
@@ -19,7 +19,7 @@ class Button(Clickable, Hoverable):
         """
             Attributes that change due to state should be in the for loop below
         """
-        for state in STATE:
+        for state in STATES:
             self.style[state] = dict()
             self.style[state][SM.BACKGROUND_IMG] = None
             self.style[state][SM.BACKGROUND_COLOR] = None

@@ -1,6 +1,6 @@
 import pygame
 from game.events import Clickable, Hoverable
-from . import STATE, STYLES_NAMES as SM
+from . import STATE, STATES, STYLES_NAMES as SM
 
 class Text(Hoverable, Clickable):
     """docstring for Text"""
@@ -22,7 +22,7 @@ class Text(Hoverable, Clickable):
             Notes:
                 Only normal state has defaults, all others have None
         """
-        for state in STATE:
+        for state in STATES:
             self.style[state] = dict()
             self.style[state][SM.BACKGROUND_IMG] = None
             self.style[state][SM.BACKGROUND_COLOR] = None
