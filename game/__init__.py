@@ -1,5 +1,6 @@
 import pygame
 import traceback
+import os
 
 from . import scenes, events, objects
 
@@ -8,6 +9,7 @@ class PyCutGame():
     def __init__(self):
         self.dev = True
         self.data = None
+        self.basePath = os.path.dirname(__file__)
         #pre-inits for pygame?
         pygame.mixer.pre_init(44100, -16, 1, 512*2)
         pygame.display.init()
@@ -19,27 +21,27 @@ class PyCutGame():
         self.height = 900
         self.fps = 15
         self.title = "PyCut"
-        self.game_icon = pygame.image.load("game/assets/img/PyCut_icon.png")
-        self.font_path  = "game/assets/font/Roboto-Thin.ttf"
-        self.bold_font_path  = "game/assets/font/Roboto-Regular.ttf"
-        self.shop_background = pygame.image.load("game/assets/img/Background.png")
-        self.counter_top = pygame.image.load("game/assets/img/Countertop.png")
-        self.help_img = pygame.image.load("game/assets/img/help.png")
-        self.plain_pizza = pygame.image.load("game/assets/img/blank_pizza.png")
-        self.button_bg = pygame.image.load("game/assets/img/red_button01.png")
-        self.button_bg_active = pygame.image.load("game/assets/img/red_button02.png")
-        self.message_bubble_img = pygame.image.load("game/assets/img/message_bubble.png")
-        self.cheese_img = pygame.image.load("game/assets/img/cheese.png")
-        self.mushroom_img = pygame.image.load("game/assets/img/mushroom.png")
-        self.pepperoni_img = pygame.image.load("game/assets/img/pepperoni.png")
-        self.pineapple_img = pygame.image.load("game/assets/img/pineapple.png")
-        self.trash_can_img = pygame.image.load("game/assets/img/trash_can.png")
-        self.trash_can_front_img = pygame.image.load("game/assets/img/trash_can_front.png")
-        self.trash_can_back_img = pygame.image.load("game/assets/img/trash_can_back.png")
-        self.character_1 = pygame.image.load("game/assets/img/Character1.png")
-        self.character_2 = pygame.image.load("game/assets/img/Character2.png")
-        self.character_3 = pygame.image.load("game/assets/img/Character3.png")
-        self.character_4 = pygame.image.load("game/assets/img/Character4.png")
+        self.game_icon = self.load_image("PyCut_icon.png")
+        self.font_path  = os.path.join(self.basePath, "assets/font/Roboto-Thin.ttf")
+        self.bold_font_path  = os.path.join(self.basePath, "assets/font/Roboto-Regular.ttf")
+        self.shop_background = self.load_image("Background.png")
+        self.counter_top = self.load_image("Countertop.png")
+        self.help_img = self.load_image("help.png")
+        self.plain_pizza = self.load_image("blank_pizza.png")
+        self.button_bg = self.load_image("red_button01.png")
+        self.button_bg_active = self.load_image("red_button02.png")
+        self.message_bubble_img = self.load_image("message_bubble.png")
+        self.cheese_img = self.load_image("cheese.png")
+        self.mushroom_img = self.load_image("mushroom.png")
+        self.pepperoni_img = self.load_image("pepperoni.png")
+        self.pineapple_img = self.load_image("pineapple.png")
+        self.trash_can_img = self.load_image("trash_can.png")
+        self.trash_can_front_img = self.load_image("trash_can_front.png")
+        self.trash_can_back_img = self.load_image("trash_can_back.png")
+        self.character_1 = self.load_image("Character1.png")
+        self.character_2 = self.load_image("Character2.png")
+        self.character_3 = self.load_image("Character3.png")
+        self.character_4 = self.load_image("Character4.png")
         self.game_characters = [self.character_1, self.character_2,
                                 self.character_3, self.character_4]
         self.game_toppings = [self.cheese_img, self.mushroom_img,
@@ -99,6 +101,14 @@ class PyCutGame():
 
     def quit(self):
         self.quit_attempt = True
+
+    def load_image(self, img):
+        """Load image from file path
+
+        img: The name of the image to load
+        """
+        img_path = os.path.join(self.basePath, "assets/img/" + img)
+        return pygame.image.load(img_path)
 
     def write_file(self, file_path):
         # Ignoring file_path because it seems to be useless when this actually gets called
