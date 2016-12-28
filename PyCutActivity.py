@@ -12,9 +12,7 @@ from sugar3.activity.widgets import StopButton
 
 
 import sugargame.canvas
-
-import PyCut
-
+import game
 
 class PyCutActivity(sugar3.activity.activity.Activity):
     def __init__(self, handle):
@@ -23,7 +21,7 @@ class PyCutActivity(sugar3.activity.activity.Activity):
         self.paused = False
 
         # Create the game instance.
-        self.game = PyCut.PyCut()
+        self.game = game.PyCutGame()
 
         # Build the activity toolbar.
         self.build_toolbar()
