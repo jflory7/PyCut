@@ -10,17 +10,21 @@ class PyCutGame():
         self.dev = True
         self.data = None
         self.basePath = os.path.dirname(__file__)
-        #pre-inits for pygame?
-        pygame.mixer.pre_init(44100, -16, 1, 512*2)
-        pygame.display.init()
-        pygame.font.init()
-        pygame.mixer.init(44100)
+        ##pre-inits for pygame?
+        #pygame.mixer.pre_init(44100, -16, 1, 512*2)
+        #pygame.display.init()
+        #pygame.font.init()
+        #pygame.mixer.init(44100)
         ########################
-        self.screen = pygame.display.get_surface()
         self.width = 1200
         self.height = 900
         self.fps = 15
         self.title = "PyCut"
+        self.quit_attempt = False
+        self.level = 1
+        self.total_good_pizza = 0
+
+    def load_assets(self):
         self.game_icon = self.load_image("PyCut_icon.png")
         self.font_path  = os.path.join(self.basePath, "assets/font/Roboto-Thin.ttf")
         self.bold_font_path  = os.path.join(self.basePath, "assets/font/Roboto-Regular.ttf")
@@ -46,12 +50,11 @@ class PyCutGame():
                                 self.character_3, self.character_4]
         self.game_toppings = [self.cheese_img, self.mushroom_img,
                                 self.pepperoni_img, self.pineapple_img]
-        self.quit_attempt = False
-        self.level = 1
-        self.total_good_pizza = 0
-        #everything necessary for the game should be initialized before here
-        #the context is established based on these details and passed along to the active scene
+        
+    def game_loop(self):
+        self.screen = pygame.display.get_surface()
         self.clock = pygame.time.Clock()
+        self.load_assets()
         self.font_large = pygame.font.Font(self.font_path, 72)
         self.font = pygame.font.Font(self.font_path, 24)
         self.font_small = pygame.font.Font(self.font_path, 14)
@@ -63,10 +66,7 @@ class PyCutGame():
         self.difficulty = "Easy"
         self.starting_scene = scenes.TitleScene
         self.active_scene = self.starting_scene(self)
-        """    def write(self, text, center, size=self.size):
-        = pygame.font.Font"""
 
-    def game_loop(self):
         while self.active_scene != None:
             pressed_keys = pygame.key.get_pressed()
             # Event filtering
