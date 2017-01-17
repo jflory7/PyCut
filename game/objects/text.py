@@ -1,6 +1,6 @@
 import pygame
 from game.events import Clickable, Hoverable
-from . import STATE, STYLES_NAMES as SM
+from . import STATE, STATES, STYLES_NAMES as SM
 
 class Text(Hoverable, Clickable):
     """docstring for Text"""
@@ -17,15 +17,27 @@ class Text(Hoverable, Clickable):
         self.height = None
         self.style = dict()
         self.centered = False
-        
-        self.checkState(STATE.NORMAL)
-        self.checkState(STATE.ACTIVE)
-        self.checkState(STATE.HOVER)
-        self.checkState(STATE.INACTIVE)
-        
+        """
+            Attributes that change due to state should be in the for loop below
+
+            Notes:
+                Only normal state has defaults, all others have None
+        """
+        for state in STATES:
+            self.style[state] = dict()
+            self.style[state][SM.BACKGROUND_IMG] = None
+            self.style[state][SM.BACKGROUND_COLOR] = None
+            #Any styling property with defaulst should be in
+            #the conditional below
+            if state == STATE.NORMAL:
+                self.style[state][SM.COLOR] = (0, 128, 0)
+                self.style[state][SM.PEN] = self.context.font
+            else:
+                self.style[state][SM.COLOR] = None
+                self.style[state][SM.PEN] = None
         self.drawing = None
         self.draw()
-        
+
     """
         initialize a state.
     """
@@ -64,7 +76,7 @@ class Text(Hoverable, Clickable):
         if screen:
             if self.dirty:
                 self.draw()
-            if self.centered:
+            if self.centered or False:
                 loc = (self.location[0] - self.width / 2, self.location[1])
                 screen.blit(self.drawing, loc)
             else:

@@ -1,6 +1,6 @@
 import pygame
 from game.events import Clickable, Hoverable
-from . import STATE, STYLES_NAMES as SM
+from . import STATE, STATES, STYLES_NAMES as SM
 
 class Button(Clickable, Hoverable):
     """docstring for Button"""
@@ -16,15 +16,25 @@ class Button(Clickable, Hoverable):
         self.width = None
         self.height = None
         self.style = dict()
-        
-        self.checkState(STATE.NORMAL)
-        self.checkState(STATE.ACTIVE)
-        self.checkState(STATE.HOVER)
-        self.checkState(STATE.INACTIVE)
+        """
+            Attributes that change due to state should be in the for loop below
+        """
+        for state in STATES:
+            self.style[state] = dict()
+            self.style[state][SM.BACKGROUND_IMG] = None
+            self.style[state][SM.BACKGROUND_COLOR] = None
+            #Any styling property with defaulst should be in
+            #the conditional below
+            if state == STATE.NORMAL:
+                self.style[state][SM.COLOR] = (255, 255, 255)
+                self.style[state][SM.PEN] = self.context.font
+            else:
+                self.style[state][SM.COLOR] = None
+                self.style[state][SM.PEN] = None
 
         self.drawing = None
         self.draw()
-        
+
     """
         initialize a state.
     """

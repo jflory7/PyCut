@@ -50,7 +50,7 @@ class PyCutGame():
                                 self.character_3, self.character_4]
         self.game_toppings = [self.cheese_img, self.mushroom_img,
                                 self.pepperoni_img, self.pineapple_img]
-        
+
     def game_loop(self):
         self.screen = pygame.display.get_surface()
         self.clock = pygame.time.Clock()
