@@ -6,7 +6,7 @@ from . import scenes, events, objects
 
 class PyCutGame():
     """docstring for PyCutGame"""
-    def __init__(self):
+    def __init__(self, poll_cb=None):
         self.dev = True
         self.data = None
         self.basePath = os.path.dirname(__file__)
@@ -23,6 +23,7 @@ class PyCutGame():
         self.quit_attempt = False
         self.level = 1
         self.total_good_pizza = 0
+        self.poll_cb = poll_cb
 
     def load_assets(self):
         self.game_icon = self.load_image("PyCut_icon.png")
@@ -68,6 +69,8 @@ class PyCutGame():
         self.active_scene = self.starting_scene(self)
 
         while self.active_scene != None:
+            if self.poll_cb:
+                self.poll_cb()
             pressed_keys = pygame.key.get_pressed()
             # Event filtering
             filtered_events = []

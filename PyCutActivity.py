@@ -1,10 +1,14 @@
 from gettext import gettext as _
 
 import sys
+
+import gi
+gi.require_version('Gtk', '3.0')
+
 from gi.repository import Gtk
 import pygame
 
-import sugar3.activity.activity
+from sugar3.activity.activity import Activity
 from sugar3.graphics.toolbarbox import ToolbarBox
 from sugar3.activity.widgets import ActivityToolbarButton
 from sugar3.graphics.toolbutton import ToolButton
@@ -14,29 +18,34 @@ from sugar3.activity.widgets import StopButton
 import sugargame.canvas
 import game
 
-class PyCutActivity(sugar3.activity.activity.Activity):
+class PyCutActivity(Activity):
     def __init__(self, handle):
-        super(PyCutActivity, self).__init__(handle)
+        Activity.__init__(self, handle)
 
-        self.paused = False
+        self.max_participants = 1
 
         # Create the game instance.
-        self.game = game.PyCutGame()
+        self.game = game.PyCutGame(poll_cb=self._poll_cb)
 
         # Build the activity toolbar.
         self.build_toolbar()
 
         # Build the Pygame canvas.
-        self._pygamecanvas = sugargame.canvas.PygameCanvas(self)
+        # Start the game running (self.game.run is called when the
+        # activity constructor returns).
+        self.game.canvas = sugargame.canvas.PygameCanvas(self,
+            main=self.game.run, modules=[pygame.display, pygame.font])
 
         # Note that set_canvas implicitly calls read_file when
         # resuming from the Journal.
-        self.set_canvas(self._pygamecanvas)
-        self._pygamecanvas.grab_focus()
+        self.set_canvas(self.game.canvas)
+        self.game.canvas.grab_focus()
 
-        # Start the game running (self.game.run is called when the
-        # activity constructor returns).
-        self._pygamecanvas.run_pygame(self.game.run)
+    def _poll_cb(self):
+        while Gtk.events_pending():
+            Gtk.main_iteration()
+        if self.game.quit_attempt:
+            Gtk.main_quit()
 
     def build_toolbar(self):
         toolbar_box = ToolbarBox()
@@ -46,16 +55,6 @@ class PyCutActivity(sugar3.activity.activity.Activity):
         activity_button = ActivityToolbarButton(self)
         toolbar_box.toolbar.insert(activity_button, -1)
         activity_button.show()
-
-        # Pause/Play button:
-
-        stop_play = ToolButton('media-playback-stop')
-        stop_play.set_tooltip(_("Stop"))
-        stop_play.set_accelerator(_('<ctrl>space'))
-        stop_play.connect('clicked', self._stop_play_cb)
-        stop_play.show()
-
-        toolbar_box.toolbar.insert(stop_play, -1)
 
         # Blank space (separator) and Stop button at the end:
 
@@ -68,22 +67,16 @@ class PyCutActivity(sugar3.activity.activity.Activity):
         stop_button = StopButton(self)
         toolbar_box.toolbar.insert(stop_button, -1)
         stop_button.show()
+        stop_button.connect('clicked', self._stop_cb)
 
-    def _stop_play_cb(self, button):
-        # Pause or unpause the game.
-        self.paused = not self.paused
-        self.game.set_paused(self.paused)
-
-        # Update the button to show the next action.
-        if self.paused:
-            button.set_icon('media-playback-start')
-            button.set_tooltip(_("Start"))
-        else:
-            button.set_icon('media-playback-stop')
-            button.set_tooltip(_("Stop"))
+    def _stop_cb(self, button):
+        self.game.running = False
 
     def read_file(self, file_path):
         self.game.read_file(file_path)
 
     def write_file(self, file_path):
         self.game.write_file(file_path)
+
+    def get_preview(self):
+        return self.game.canvas.get_preview()
